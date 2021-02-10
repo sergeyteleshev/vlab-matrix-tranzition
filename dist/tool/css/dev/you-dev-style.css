@@ -1,0 +1,165 @@
+/* Chrome, Safari, Edge, Opera */
+#jsLab input::-webkit-outer-spin-button,
+#jsLab input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+#jsLab input[type=number] {
+    -moz-appearance: textfield;
+}
+
+#jsLab .initialMatrixTable table td, #jsLab .initialMatrixTable table TH
+{
+    border: 1px solid #d7d7d7; /* Параметры рамки */
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#jsLab .initialMatrixTable
+{
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#jsLab .initialMatrixTable table
+{
+    margin-left: 20px;
+}
+
+#jsLab .compositionMatrixContainer, #jsLab .initialMatrixTableContainer, #jsLab .significanceMatrixContainer
+{
+    padding: 20px;
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-top: none;
+}
+
+#jsLab .initialMatrixTableContainer
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#jsLab .initialMatrixTableContainer h2
+{
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#jsLab .modal-body iframe
+{
+    width: 100%;
+}
+
+#jsLab .lab-table
+{
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px 10px;
+}
+
+#jsLab .lab-table tr:first-child td
+{
+    padding: 10px 20px;
+}
+
+#jsLab .lab-header
+{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+#jsLab .lab-header_name
+{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#jsLab .compositionMatrixTable
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#jsLab .compositionMatrixSize
+{
+    height: 100px;
+    width: 100%;
+}
+
+#jsLab .compositionMatrixSize h2, #jsLab .significanceMatrixContainer h2
+{
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#jsLab .compositionMatrixSize span
+{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#jsLab #compositionMatrixApply
+{
+    margin-top: 15px;
+}
+
+#jsLab #compositionMatrixColumns, #jsLab #compositionMatrixRows
+{
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #d7d7d7;
+}
+
+#jsLab .compositionMatrixTable_values_table tr td, #jsLab .significanceMatrixTable tr td
+{
+    border: 1px solid #d7d7d7;
+}
+
+#jsLab .compositionMatrixTable input[type="number"], #jsLab .significanceMatrixTable input[type="number"]
+{
+    border: none;
+}
+
+#jsLab .compositionMatrixTable tr td input[type="number"]
+{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+#jsLab .compositionMatrixTable_values
+{
+    margin-top: 30px;
+}
+
+#jsLab .compositionMatrixButtons
+{
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
