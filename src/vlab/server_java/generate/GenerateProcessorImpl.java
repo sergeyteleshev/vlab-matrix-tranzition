@@ -19,15 +19,21 @@ public class GenerateProcessorImpl implements GenerateProcessor {
     @Override
     public GeneratingResult generate(String condition) {
         //do Generate logic here
-        String text = "text";
-        String code = "code";
-        String instructions = "instructions";
+        String text = "";
+        String code = "";
+        String instructions = "";
         JSONObject generatedVariant = new JSONObject();
 
         int n = 8; //размерность матрицы
         int d = 15; //количество ненулевых элементов матрицы
 
         double[][] initialMatrix = generateInitialMatrix(n, d);
+//        double[][] initialMatrix = {
+//                {0, 0.3, 0.6, 0.5},
+//                {0, 0, 0, 0},
+//                {0, 0, 0, 0},
+//                {0, 0.6, 0.2, 0},
+//        };
 
         generatedVariant.put("initialMatrix", initialMatrix);
         generatedVariant.put("n", n);

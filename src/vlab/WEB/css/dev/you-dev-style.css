@@ -32,7 +32,7 @@
 
 #jsLab .initialMatrixTable table
 {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 #jsLab .compositionMatrixContainer, #jsLab .initialMatrixTableContainer, #jsLab .significanceMatrixContainer
@@ -144,7 +144,7 @@
     border: none;
 }
 
-#jsLab .compositionMatrixTable tr td input[type="number"]
+#jsLab .compositionMatrixTable tr td input[type="number"], #jsLab .significanceMatrixTable tr td input[type="number"]
 {
     width: 30px;
     height: 30px;
@@ -162,4 +162,45 @@
     justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
+}
+
+#jsLab .compositionMatrixButtons
+{
+    margin-top: 20px;
+}
+
+#jsLab #cancelCompositionMatrix
+{
+    margin-left: 10px;
+}
+
+#jsLab .significanceMatrixContainer
+{
+    text-align: left;
+}
+
+#jsLab #significanceMatrixApply, #jsLab #finishLab, #jsLab #cancelSignificanceMatrix, #jsLab #cancelCompositionMatrix
+{
+    margin-top: 10px;
+}
+
+#jsLab .tranzitionMatrixElement_yellow
+{
+    background-color: #DAF736;
+    color: white;
+}
+
+.tranzitionTable_td
+{
+    border: 1px solid #d7d7d7;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.tranzitionTable_td:hover
+{
+    cursor: pointer;
 }

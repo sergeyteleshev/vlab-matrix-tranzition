@@ -25,6 +25,7 @@ function getHTML(templateData)
 
     let significanceMatrixApplyInput = ``;
     let compositionMatrixCancelInput = ``;
+    let significanceMatrixContainer = ``;
 
     if(initialMatrix.length)
     {
@@ -46,11 +47,10 @@ function getHTML(templateData)
 
     if(templateData.isCompositionMatrixSizeCreated)
     {
-        compositionMatrixColumnsInput = `<input id="compositionMatrixColumns" type="number" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>`;
-        compositionMatrixRowsInput = `<input id="compositionMatrixRows" type="number" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>`;
+        compositionMatrixColumnsInput = `<input id="compositionMatrixColumns" type="number" ${templateData.isCompositionMatrixSizeCreated ? "disabled" : ""} value="${templateData.isCompositionMatrixSizeCreated ? templateData.compositionMatrixColumns : ""}"/>`;
+        compositionMatrixRowsInput = `<input id="compositionMatrixRows" type="number" ${templateData.isCompositionMatrixSizeCreated ? "disabled" : ""} value="${templateData.isCompositionMatrixSizeCreated ? templateData.compositionMatrixRows : ""}"/>`;
         significanceMatrixApplyInput = `<input class="btn btn-secondary" id="significanceMatrixApply" type="button" value="Далее" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>`;
         compositionMatrixCancelInput = `<input class="btn btn-danger" type="button" id="cancelCompositionMatrix" value="Назад" ${templateData.isCompositionMatrixCreated ? "disabled " : ""}/>`;
-
 
         compositionMatrix = templateData.compositionMatrix.slice();
         compositionMatrixTable += `<table class="compositionMatrixTable_values_table">`;
@@ -69,13 +69,41 @@ function getHTML(templateData)
         compositionMatrixTable += `</table>`;
     }
 
+    if(templateData.isCompositionMatrixCreated)
+    {
+        let significanceMatrixTable = `<table class="R1SetTable">`
+        let significanceMatrix = [...templateData.significanceMatrix];
+        let tranzitionMatrix = [...templateData.tranzitionMatrix];
+
+        for(let i = 0; i < significanceMatrix.length; i++)
+        {
+            significanceMatrixTable += `<tr>`;
+
+            for(let j = 0; j < significanceMatrix[i].length; j++)
+            {
+                significanceMatrixTable += `<td class="tranzitionTable_td ${tranzitionMatrix[i][j] === 1 ? "tranzitionMatrixElement_yellow" : ""}" id="significanceMatrixInputId_${i}_${j}">${significanceMatrix[i][j]}</td>`;
+            }
+
+            significanceMatrixTable += `</tr>`;
+        }
+
+        significanceMatrixTable += `</table>`
+
+        significanceMatrixContainer = `
+        <div class="significanceMatrixContainer">
+            <h2>Проверка условия транзитивности отношения:</h2>
+            ${significanceMatrixTable}
+            <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Назад"/>
+        </div>`;
+    }
+
     return `
         <div class="lab">
             <table class="lab-table">
                 <tr>
                     <td>
                         <div class="lab-header">                          
-                            <span class="lab-header_name">Композиция отношений</span>
+                            <span class="lab-header_name">Транзитивность нечетких отношени</span>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalScrollable">
                               Справка
@@ -96,7 +124,6 @@ function getHTML(templateData)
                                         <p>Если она создана неправильно, то нажмите кнопку <b>«Назад»</b> и исправьте размерность матрицы.</p>
                                         <p>Если матрица композиции заполнена, то нажмите кнопку <b>«Далее»</b>. После этой команды будет доступна для заполнения матрица среза. Если нужно внести изменения в предыдущую матрицу, то используйте кнопку <b>«Назад»</b>.</p>
                                         <p>После завершения заполнения матрицы среза нажмите кнопку <b>«Ответ готов»</b> в нижнем правом углу стенда.</p>
-                                        <p></p>
                                   </div>                                 
                                 </div>
                               </div>
@@ -116,7 +143,7 @@ function getHTML(templateData)
                 <div class="compositionMatrixTable">
                     <div class="compositionMatrixSize">
                         <div>                  
-                            <h2>Ввести размерность матрицы композиции:</h2>
+                            <h2>Ввести размерность матрицы отношения:</h2>
                             <div class="compositionMatrixSize_div">
                                 ${compositionMatrixRowsInput}
                                 <span>X</span>
@@ -137,7 +164,8 @@ function getHTML(templateData)
                     ${significanceMatrixApplyInput}                                             
                     ${compositionMatrixCancelInput}
                 </div>
-            </div>                                                                               
+            </div> 
+            ${significanceMatrixContainer}                                                                              
         </div>`;
 }
 
@@ -146,6 +174,8 @@ function initState() {
         initialMatrix: [],
         isCompositionMatrixCreated: false,
         compositionMatrix: [],
+        significanceMatrix: [],
+        tranzitionMatrix: [],
         isCompositionMatrixSizeCreated: false,
         compositionMatrixColumns: 0,
         compositionMatrixRows: 0,
@@ -213,6 +243,88 @@ function bindActionListeners(appInstance)
         // перересовываем приложение
         appInstance.subscriber.emit('render', state);
     });
+
+    if(document.body.contains(document.getElementById("cancelCompositionMatrix")))
+    {
+        document.getElementById("cancelCompositionMatrix").addEventListener('click', () => {
+            const state = appInstance.state.updateState((state) => {
+                return {
+                    ...state,
+                    isCompositionMatrixCreated: false,
+                    isCompositionMatrixSizeCreated: false,
+                    compositionMatrix: [],
+                }
+            });
+
+            appInstance.subscriber.emit('render', state);
+        });
+    }
+
+    if(document.body.contains(document.getElementById("significanceMatrixApply")))
+    {
+        document.getElementById("significanceMatrixApply").addEventListener('click', () => {
+            const state = appInstance.state.updateState((state) => {
+                let compositionMatrix = state.compositionMatrix;
+                let significanceMatrix = [...compositionMatrix];
+                let tranzitionMatrix = zeros([significanceMatrix.length, significanceMatrix.length]);
+
+                for(let i = 0; i < compositionMatrix.length; i++)
+                {
+                    for(let j = 0; j < compositionMatrix[i].length; j++)
+                    {
+                        let compositionMatrixInputId = `compositionMatrixInput_${i}_${j}`;
+                        compositionMatrix[i][j] = parseFloat(document.getElementById(compositionMatrixInputId).value);
+                    }
+                }
+
+                return {
+                    ...state,
+                    significanceMatrix,
+                    compositionMatrix,
+                    tranzitionMatrix,
+                    isCompositionMatrixCreated: true,
+                }
+            });
+
+            // перересовываем приложение
+            appInstance.subscriber.emit('render', state);
+        });
+    }
+
+    if(appInstance.state.getState().significanceMatrix && appInstance.state.getState().significanceMatrix.length > 0 && appInstance.state.getState().significanceMatrix[0].length > 0)
+    {
+        let significanceMatrix = [...appInstance.state.getState().significanceMatrix];
+        let tranzitionMatrix = [...appInstance.state.getState().tranzitionMatrix];
+
+        for(let i = 0; i < significanceMatrix.length; i++)
+        {
+            for(let j = 0; j < significanceMatrix[i].length; j++)
+            {
+                let compositionMatrixInputId = `significanceMatrixInputId_${i}_${j}`;
+
+                document.getElementById(compositionMatrixInputId).addEventListener('click', (event) => {
+                    if(tranzitionMatrix[i][j] === 0)
+                    {
+                        tranzitionMatrix[i][j] = 1;
+                    }
+                    else if(tranzitionMatrix[i][j] === 1)
+                    {
+                        tranzitionMatrix[i][j] = 0;
+                    }
+
+                    const state = appInstance.state.updateState((state) => {
+                        return {
+                            ...state,
+                            tranzitionMatrix,
+                        }
+                    });
+
+                    // перересовываем приложение
+                    appInstance.subscriber.emit('render', state);
+                });
+            }
+        }
+    }
 }
 
 function init_lab() {
