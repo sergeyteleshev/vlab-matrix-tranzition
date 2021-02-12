@@ -27,12 +27,12 @@ public class GenerateProcessorImpl implements GenerateProcessor {
         try
         {
             //для того чтобы сервер данные подтянулись из кадров на de
-//        int n = Integer.parseInt(condition.split(",")[0]);
-//        int d = Integer.parseInt(condition.split(",")[1]);
+        int n = Integer.parseInt(condition.split(",")[0]);
+        int d = Integer.parseInt(condition.split(",")[1]);
 
             //для ВЛТ, так как там нет кадров
-            int n = 8; //размерность матрицы
-            int d = 15; //количество ненулевых элементов матрицы
+//            int n = 8; //размерность матрицы
+//            int d = 15; //количество ненулевых элементов матрицы
 
             double[][] initialMatrix = generateInitialMatrix(n, d);
 

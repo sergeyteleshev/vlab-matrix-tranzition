@@ -104,6 +104,10 @@
 
 #jsLab .compositionMatrixSize
 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     height: 100px;
     width: 100%;
 }
@@ -203,4 +207,12 @@
 .tranzitionTable_td:hover
 {
     cursor: pointer;
+}
+
+.compositionMatrixSize_div
+{
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
 }
