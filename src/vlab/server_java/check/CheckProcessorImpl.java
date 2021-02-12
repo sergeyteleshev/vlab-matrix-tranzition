@@ -1,5 +1,6 @@
 package vlab.server_java.check;
 
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import rlcp.check.ConditionForChecking;
@@ -25,52 +26,59 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         double points = 0;
         String comment = "";
 
-        String code = generatingResult.getCode();
-        JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
-        JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
-
-        double[][] initialMatrix = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("initialMatrix"));
-        double[][] serverCompositionMatrix = getCompositionMatrix(initialMatrix, initialMatrix);
-        int[][] serverTranzitionMatrix = getTranzitionMatrix(initialMatrix, serverCompositionMatrix);
-        int serverCompositionMatrixRows = serverCompositionMatrix.length;
-        int serverCompositionMatrixColumns = serverCompositionMatrix[0].length;
-
-        double[][] clientCompositionMatrix = twoDimensionalJsonArrayToDouble(jsonInstructions.getJSONArray("compositionMatrix"));
-        int[][] clientTranzitionMatrix = twoDimensionalJsonArrayToInt(jsonInstructions.getJSONArray("tranzitionMatrix"));
-        int clientCompositionMatrixColumns = jsonInstructions.getInt("compositionMatrixColumns");
-        int clientCompositionMatrixRows = jsonInstructions.getInt("compositionMatrixRows");
-
-        if(serverCompositionMatrixColumns == clientCompositionMatrixColumns)
+        try
         {
-            points += compositionMatrixSizePoints / 2;
+            String code = generatingResult.getCode();
+            JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
+            JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
+
+            double[][] initialMatrix = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("initialMatrix"));
+            double[][] serverCompositionMatrix = getCompositionMatrix(initialMatrix, initialMatrix);
+            int[][] serverTranzitionMatrix = getTranzitionMatrix(initialMatrix, serverCompositionMatrix);
+            int serverCompositionMatrixRows = serverCompositionMatrix.length;
+            int serverCompositionMatrixColumns = serverCompositionMatrix[0].length;
+
+            double[][] clientCompositionMatrix = twoDimensionalJsonArrayToDouble(jsonInstructions.getJSONArray("compositionMatrix"));
+            int[][] clientTranzitionMatrix = twoDimensionalJsonArrayToInt(jsonInstructions.getJSONArray("tranzitionMatrix"));
+            int clientCompositionMatrixColumns = jsonInstructions.getInt("compositionMatrixColumns");
+            int clientCompositionMatrixRows = jsonInstructions.getInt("compositionMatrixRows");
+
+            if(serverCompositionMatrixColumns == clientCompositionMatrixColumns)
+            {
+                points += compositionMatrixSizePoints / 2;
+            }
+            else
+            {
+                comment += "Неверное количество столбцов в матрице отношения. ";
+            }
+
+            if(serverCompositionMatrixRows == clientCompositionMatrixRows)
+            {
+                points += compositionMatrixSizePoints / 2;
+            }
+            else
+            {
+                comment += "Неверное количество строк в матрице отношения. ";
+            }
+
+            if(points == compositionMatrixSizePoints)
+            {
+                JSONObject compositionMatrixCheckAnswer = checkCompositionMatrix(serverCompositionMatrix, clientCompositionMatrix, compositionMatrixPoints);
+                JSONObject tranzitionMatrixCheckAnswer = checkTranzitionMatrix(serverTranzitionMatrix, clientTranzitionMatrix, tranzitionMatrixPoints);
+
+                double compositionMatrixPoints = roundDoubleToNDecimals(compositionMatrixCheckAnswer.getDouble("points"), 2);
+                String compositionMatrixComment = compositionMatrixCheckAnswer.getString("comment");
+
+                double tranzitionMatrixPoints = roundDoubleToNDecimals(tranzitionMatrixCheckAnswer.getDouble("points"), 2);
+                String tranzitionMatrixComment = tranzitionMatrixCheckAnswer.getString("comment");
+
+                points += compositionMatrixPoints + tranzitionMatrixPoints;
+                comment += compositionMatrixComment + tranzitionMatrixComment;
+            }
         }
-        else
+        catch (Exception e)
         {
-            comment += "Неверное количество столбцов в матрице отношения. ";
-        }
-
-        if(serverCompositionMatrixRows == clientCompositionMatrixRows)
-        {
-            points += compositionMatrixSizePoints / 2;
-        }
-        else
-        {
-            comment += "Неверное количество строк в матрице отношения. ";
-        }
-
-        if(points == compositionMatrixSizePoints)
-        {
-            JSONObject compositionMatrixCheckAnswer = checkCompositionMatrix(serverCompositionMatrix, clientCompositionMatrix, compositionMatrixPoints);
-            JSONObject tranzitionMatrixCheckAnswer = checkTranzitionMatrix(serverTranzitionMatrix, clientTranzitionMatrix, tranzitionMatrixPoints);
-
-            double compositionMatrixPoints = roundDoubleToNDecimals(compositionMatrixCheckAnswer.getDouble("points"), 2);
-            String compositionMatrixComment = compositionMatrixCheckAnswer.getString("comment");
-
-            double tranzitionMatrixPoints = roundDoubleToNDecimals(tranzitionMatrixCheckAnswer.getDouble("points"), 2);
-            String tranzitionMatrixComment = tranzitionMatrixCheckAnswer.getString("comment");
-
-            points += compositionMatrixPoints + tranzitionMatrixPoints;
-            comment += compositionMatrixComment + tranzitionMatrixComment;
+            e.printStackTrace();
         }
 
         return new CheckingSingleConditionResult(BigDecimal.valueOf(points), comment);

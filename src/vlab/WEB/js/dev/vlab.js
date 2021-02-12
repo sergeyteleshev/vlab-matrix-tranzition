@@ -103,7 +103,7 @@ function getHTML(templateData)
                 <tr>
                     <td>
                         <div class="lab-header">                          
-                            <span class="lab-header_name">Транзитивность нечетких отношени</span>
+                            <span class="lab-header_name">Транзитивность нечетких отношений</span>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalScrollable">
                               Справка
@@ -122,8 +122,8 @@ function getHTML(templateData)
                                   <div class="modal-body">
                                         <p>Введите количество строк и столбцов в матрице композиции и нажмите кнопку <b>«Создать матрицу»</b>. После этой команды эта матрица будет доступна для заполнения.</p>
                                         <p>Если она создана неправильно, то нажмите кнопку <b>«Назад»</b> и исправьте размерность матрицы.</p>
-                                        <p>Если матрица композиции заполнена, то нажмите кнопку <b>«Далее»</b>. После этой команды будет доступна для заполнения матрица среза. Если нужно внести изменения в предыдущую матрицу, то используйте кнопку <b>«Назад»</b>.</p>
-                                        <p>После завершения заполнения матрицы среза нажмите кнопку <b>«Ответ готов»</b> в нижнем правом углу стенда.</p>
+                                        <p>Если матрица композиции заполнена, то нажмите кнопку <b>«Далее»</b>. После этой команды будет доступна для заполнения матрица транзитивности отношения. Если нужно внести изменения в предыдущую матрицу, то используйте кнопку <b>«Назад»</b>.</p>
+                                        <p>После завершения заполнения матрицы транзитивности отношения нажмите кнопку <b>«Ответ готов»</b> в нижнем правом углу стенда.</p>
                                   </div>                                 
                                 </div>
                               </div>
@@ -324,6 +324,22 @@ function bindActionListeners(appInstance)
                 });
             }
         }
+    }
+
+    if(document.body.contains(document.getElementById("cancelSignificanceMatrix")))
+    {
+        document.getElementById("cancelSignificanceMatrix").addEventListener('click', () => {
+            const state = appInstance.state.updateState((state) => {
+                return {
+                    ...state,
+                    isSignificanceMatrixCreated: false,
+                    isCompositionMatrixCreated: false,
+                    tranzitionMatrix: [],
+                }
+            });
+
+            appInstance.subscriber.emit('render', state);
+        });
     }
 }
 

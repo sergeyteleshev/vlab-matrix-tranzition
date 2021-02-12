@@ -19,15 +19,23 @@ public class GenerateProcessorImpl implements GenerateProcessor {
     @Override
     public GeneratingResult generate(String condition) {
         //do Generate logic here
-        String text = "";
+        String text = "Ваш вариант загружен в виртуальный стенд.";
         String code = "";
         String instructions = "";
         JSONObject generatedVariant = new JSONObject();
 
-        int n = 8; //размерность матрицы
-        int d = 15; //количество ненулевых элементов матрицы
+        try
+        {
+            //для того чтобы сервер данные подтянулись из кадров на de
+//        int n = Integer.parseInt(condition.split(",")[0]);
+//        int d = Integer.parseInt(condition.split(",")[1]);
 
-        double[][] initialMatrix = generateInitialMatrix(n, d);
+            //для ВЛТ, так как там нет кадров
+            int n = 8; //размерность матрицы
+            int d = 15; //количество ненулевых элементов матрицы
+
+            double[][] initialMatrix = generateInitialMatrix(n, d);
+
 //        double[][] initialMatrix = {
 //                {0, 0.3, 0.6, 0.5},
 //                {0, 0, 0, 0},
@@ -35,11 +43,16 @@ public class GenerateProcessorImpl implements GenerateProcessor {
 //                {0, 0.6, 0.2, 0},
 //        };
 
-        generatedVariant.put("initialMatrix", initialMatrix);
-        generatedVariant.put("n", n);
-        generatedVariant.put("d", d);
+            generatedVariant.put("initialMatrix", initialMatrix);
+            generatedVariant.put("n", n);
+            generatedVariant.put("d", d);
 
-        code = generatedVariant.toString();
+            code = generatedVariant.toString();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         return new GeneratingResult(text, code, instructions);
     }
