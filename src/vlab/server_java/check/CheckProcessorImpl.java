@@ -118,24 +118,23 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
     static JSONObject checkTranzitionMatrix(int[][] serverAnswer, int[][] clientAnswer, double points)
     {
-        int matrixColumnsAmount = serverAnswer.length;
-        int matrixRowsAmount = serverAnswer[0].length;
         double clientPoints = 0;
         StringBuilder comment = new StringBuilder();
         JSONObject result = new JSONObject();
         int tranzitionMatrixNonZeroElements = countNonZerosInIntTwoDimensionalArray(serverAnswer);
-        double deltaPoints = points / (tranzitionMatrixNonZeroElements);
+        double deltaPoints;
 
-        try
+        if(tranzitionMatrixNonZeroElements == 0)
         {
+            deltaPoints = points / (serverAnswer.length * serverAnswer[0].length);
+
             for(int i = 0; i < serverAnswer.length; i++)
             {
                 for(int j = 0; j < serverAnswer[i].length; j++)
                 {
                     if(serverAnswer[i][j] == clientAnswer[i][j])
                     {
-                        if(serverAnswer[i][j] != 0)
-                            clientPoints += deltaPoints;
+                        clientPoints += deltaPoints;
                     }
                     else
                     {
@@ -144,10 +143,33 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                 }
             }
         }
-        catch (ArrayIndexOutOfBoundsException e)
+        else
         {
-            comment = new StringBuilder("Неверный размер матрицы.");
-            clientPoints = 0;
+            deltaPoints = points / (tranzitionMatrixNonZeroElements);
+
+            try
+            {
+                for(int i = 0; i < serverAnswer.length; i++)
+                {
+                    for(int j = 0; j < serverAnswer[i].length; j++)
+                    {
+                        if(serverAnswer[i][j] == clientAnswer[i][j])
+                        {
+                            if(serverAnswer[i][j] != 0)
+                                clientPoints += deltaPoints;
+                        }
+                        else
+                        {
+                            comment.append("Неверное значение элемента TM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы транзитивности отношения: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                        }
+                    }
+                }
+            }
+            catch (ArrayIndexOutOfBoundsException e)
+            {
+                comment = new StringBuilder("Неверный размер матрицы.");
+                clientPoints = 0;
+            }
         }
 
         result.put("points", clientPoints);
@@ -158,13 +180,12 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
     static JSONObject checkCompositionMatrix(double[][] serverAnswer, double[][] clientAnswer, double points)
     {
-        double matrixColumnsAmount = serverAnswer.length;
-        double matrixRowsAmount = serverAnswer[0].length;
         double clientPoints = 0;
         StringBuilder comment = new StringBuilder();
         JSONObject result = new JSONObject();
         int serverAnswerNonZerosElements = countNonZerosInDoubleTwoDimensionalArray(serverAnswer);
-        double deltaPoints = points / (serverAnswerNonZerosElements);
+        double deltaPoints;
+        serverAnswerNonZerosElements = countNonZerosInDoubleTwoDimensionalArray(serverAnswer);
 
         try
         {
@@ -172,21 +193,38 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
             {
                 for(int j = 0; j < serverAnswer[i].length; j++)
                 {
-                    if(serverAnswer[i][j] == clientAnswer[i][j])
+                    if(serverAnswerNonZerosElements > 0)
                     {
-                        if (serverAnswer[i][j] != 0)
-                            clientPoints += deltaPoints;
+                        deltaPoints = points / (serverAnswerNonZerosElements);
+
+                        if(serverAnswer[i][j] == clientAnswer[i][j])
+                        {
+                            if (serverAnswer[i][j] != 0)
+                                clientPoints += deltaPoints;
+                        }
+                        else
+                        {
+                            comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы отношения второй степени: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                        }
                     }
                     else
                     {
-                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы композиции: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                        deltaPoints = points / (serverAnswer.length * serverAnswer.length);
+                        if(serverAnswer[i][j] == clientAnswer[i][j])
+                        {
+                            clientPoints += deltaPoints;
+                        }
+                        else
+                        {
+                            comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы отношения второй степени: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                        }
                     }
                 }
             }
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            comment = new StringBuilder("Неверный размер матрицы композиции. ");
+            comment = new StringBuilder("Неверный размер матрицы отношения второй степени. ");
             clientPoints = 0;
         }
 
@@ -214,7 +252,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         return tranzitionMatrix;
     }
 
-    private static double[][] getCompositionMatrix(double[][] R1Set, double[][] R2Set)
+    public static double[][] getCompositionMatrix(double[][] R1Set, double[][] R2Set)
     {
         double[][] R1R2Set = new double[R1Set.length][R2Set[0].length];
         for(int i = 0; i < R1Set.length; i++)

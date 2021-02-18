@@ -216,3 +216,9 @@
     align-items: center;
     width: 100%;
 }
+
+.initialMatrixBg
+{
+    font-style: italic;
+    background-color: #C0C0C0;
+}

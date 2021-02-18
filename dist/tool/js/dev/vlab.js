@@ -31,11 +31,27 @@ function getHTML(templateData)
     {
         initialMatrixTable += `<table class="R1SetTable">`;
 
+        initialMatrixTable += `<tr>`;
+
+        for(let i = 0; i < initialMatrix.length + 1; i++)
+        {
+            if(i === 0)
+                initialMatrixTable += `<td> </td>`;
+            else
+                initialMatrixTable += `<td class="initialMatrixBg">${i}</td>`;
+        }
+
+        initialMatrixTable += `</tr>`;
+
         for(let i = 0; i < initialMatrix.length; i++)
         {
             initialMatrixTable += `<tr>`;
+
             for(let j = 0; j < initialMatrix[i].length; j++)
             {
+                if(j === 0)
+                    initialMatrixTable += `<td class="initialMatrixBg">${i + 1}</td>`;
+
                 initialMatrixTable += `<td>${initialMatrix[i][j]}</td>`;
             }
 
@@ -91,7 +107,7 @@ function getHTML(templateData)
 
         significanceMatrixContainer = `
         <div class="significanceMatrixContainer">
-            <h2>Проверка условия транзитивности отношения:</h2>
+            <h2>Проверка условия транзитивности:</h2>
             ${significanceMatrixTable}
             <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Назад"/>
         </div>`;
@@ -120,10 +136,9 @@ function getHTML(templateData)
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                        <p>Введите количество строк и столбцов в матрице композиции и нажмите кнопку <b>«Создать матрицу»</b>. После этой команды эта матрица будет доступна для заполнения.</p>
-                                        <p>Если она создана неправильно, то нажмите кнопку <b>«Назад»</b> и исправьте размерность матрицы.</p>
-                                        <p>Если матрица композиции заполнена, то нажмите кнопку <b>«Далее»</b>. После этой команды будет доступна для заполнения матрица транзитивности отношения. Если нужно внести изменения в предыдущую матрицу, то используйте кнопку <b>«Назад»</b>.</p>
-                                        <p>После завершения заполнения матрицы транзитивности отношения нажмите кнопку <b>«Ответ готов»</b> в нижнем правом углу стенда.</p>
+                                       <p>Введите количество строк и столбцов в матрице отношения второй степени и и нажмите кнопку <b>«Создать матрицу»</b>. После этой команды эта матрица будет доступна для заполнения. Если она создана неправильно, то нажмите кнопку <b>«Назад»</b> и исправьте размерность матрицы.</p>
+                                       <p>Если матрица отношения второй степени заполнена, то нажмите кнопку <b>«Далее»</b>. После этой команды будет доступна матрица отношения второй степени для проверки транзитивности. Щелкайте по тем ячейкам этой матрицы, в которых есть нарушение условия транзитивности заданного отношения: эти ячейки будут <b>выделены цветом</b>. Если нужно внести изменения в предыдущую матрицу, то используйте кнопку <b>«Назад»</b>.</p>
+                                       <p>После завершения проверки транзитивности нажмите кнопку <b>«Ответ готов»</b> в нижнем правом углу стенда.</p>                                   
                                   </div>                                 
                                 </div>
                               </div>
@@ -143,7 +158,7 @@ function getHTML(templateData)
                 <div class="compositionMatrixTable">
                     <div class="compositionMatrixSize">
                         <div>                  
-                            <h2>Ввести размерность матрицы отношения:</h2>
+                            <h2>Ввести размерность матрицы отношения второй степени:</h2>
                             <div class="compositionMatrixSize_div">
                                 ${compositionMatrixRowsInput}
                                 <span>X</span>
