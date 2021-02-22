@@ -29,12 +29,12 @@ public class GenerateProcessorImpl implements GenerateProcessor {
         try
         {
             //для того чтобы сервер данные подтянулись из кадров на de
-    //        int n = Integer.parseInt(condition.split(",")[0]);
-    //        int d = Integer.parseInt(condition.split(",")[1]);
+//            int n = Integer.parseInt(condition.split(",")[0]);
+//            int d = Integer.parseInt(condition.split(",")[1]);
 
             //для ВЛТ, так как там нет кадров
             int n = 4; //размерность матрицы
-            int d = 3; //количество ненулевых элементов матрицы
+            int d = 5; //количество ненулевых элементов матрицы
 
             double[][] initialMatrix = generateInitialMatrix(n, d);
 
@@ -64,7 +64,6 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             generatedVariant.put("n", n);
             generatedVariant.put("d", d);
             double[][] compM = getCompositionMatrix(initialMatrix, initialMatrix);
-            text += " " + Arrays.deepToString(compM);
 
             code = generatedVariant.toString();
         }

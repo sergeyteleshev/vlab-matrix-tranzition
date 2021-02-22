@@ -35,12 +35,24 @@
     margin-left: 10px;
 }
 
-#jsLab .compositionMatrixContainer, #jsLab .initialMatrixTableContainer, #jsLab .significanceMatrixContainer
+#jsLab .compositionMatrixContainer, #jsLab .initialMatrixTableContainer
 {
     padding: 20px;
     width: 100%;
     border: 1px solid #d7d7d7;
     border-top: none;
+}
+
+#jsLab .significanceMatrixContainer
+{
+
+}
+
+#jsLab .compositionMatrixContainer
+{
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 #jsLab .initialMatrixTableContainer
@@ -104,6 +116,7 @@
 
 #jsLab .compositionMatrixSize
 {
+    margin: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -112,7 +125,7 @@
     width: 100%;
 }
 
-#jsLab .compositionMatrixSize h2, #jsLab .significanceMatrixContainer h2
+#jsLab .compositionMatrixSize h2, #jsLab .significanceMatrixContainer h2, #jsLab .compositionMatrixContainer h2
 {
     text-align: left;
     font-size: 16px;
@@ -157,7 +170,7 @@
 
 #jsLab .compositionMatrixTable_values
 {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 #jsLab .compositionMatrixButtons
@@ -168,11 +181,6 @@
     width: 100%;
 }
 
-#jsLab .compositionMatrixButtons
-{
-    margin-top: 20px;
-}
-
 #jsLab #cancelCompositionMatrix
 {
     margin-left: 10px;
@@ -180,12 +188,21 @@
 
 #jsLab .significanceMatrixContainer
 {
+    margin-left: 40px;
     text-align: left;
+}
+
+#jsLab .significanceMatrixContainer h2
+{
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #jsLab #significanceMatrixApply, #jsLab #finishLab, #jsLab #cancelSignificanceMatrix, #jsLab #cancelCompositionMatrix
 {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 #jsLab .tranzitionMatrixElement_yellow
@@ -221,4 +238,9 @@
 {
     font-style: italic;
     background-color: #C0C0C0;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    border: 1px solid #d7d7d7;
+    vertical-align: middle;
 }

@@ -71,11 +71,26 @@ function getHTML(templateData)
         compositionMatrix = templateData.compositionMatrix.slice();
         compositionMatrixTable += `<table class="compositionMatrixTable_values_table">`;
 
+        compositionMatrixTable += `<tr>`;
+
+        for(let i = 0; i < compositionMatrix.length + 1; i++)
+        {
+            if(i === 0)
+                compositionMatrixTable += `<td> </td>`;
+            else
+                compositionMatrixTable += `<td class="initialMatrixBg">${i}</td>`;
+        }
+
+        compositionMatrixTable += `</tr>`;
+
         for(let i = 0; i < compositionMatrix.length; i++)
         {
             compositionMatrixTable += `<tr>`;
             for(let j = 0; j < compositionMatrix[i].length; j++)
             {
+                if(j === 0)
+                    compositionMatrixTable += `<td class="initialMatrixBg">${i + 1}</td>`;
+
                 compositionMatrixTable += `<td><input type="number" id="compositionMatrixInput_${i}_${j}" value="${compositionMatrix[i][j]}" ${templateData.isCompositionMatrixCreated? "disabled" : ""}/></td>`;
             }
 
@@ -91,12 +106,27 @@ function getHTML(templateData)
         let significanceMatrix = [...templateData.significanceMatrix];
         let tranzitionMatrix = [...templateData.tranzitionMatrix];
 
+        significanceMatrixTable += `<tr>`;
+
+        for(let i = 0; i < significanceMatrix.length + 1; i++)
+        {
+            if(i === 0)
+                significanceMatrixTable += `<td> </td>`;
+            else
+                significanceMatrixTable += `<td class="initialMatrixBg">${i}</td>`;
+        }
+
+        significanceMatrixTable += `</tr>`;
+
         for(let i = 0; i < significanceMatrix.length; i++)
         {
             significanceMatrixTable += `<tr>`;
 
             for(let j = 0; j < significanceMatrix[i].length; j++)
             {
+                if(j === 0)
+                    significanceMatrixTable += `<td class="initialMatrixBg">${i + 1}</td>`;
+
                 significanceMatrixTable += `<td class="tranzitionTable_td ${tranzitionMatrix[i][j] === 1 ? "tranzitionMatrixElement_yellow" : ""}" id="significanceMatrixInputId_${i}_${j}">${significanceMatrix[i][j]}</td>`;
             }
 
@@ -154,33 +184,34 @@ function getHTML(templateData)
                     ${initialMatrixTable}
                 </div>
             </div>                        
-            <div class="compositionMatrixContainer">
+            <div class="compositionMatrixSize">
+                <div>                  
+                    <h2>Ввести размерность матрицы отношения второй степени:</h2>
+                    <div class="compositionMatrixSize_div">
+                        ${compositionMatrixRowsInput}
+                        <span>X</span>
+                        ${compositionMatrixColumnsInput}
+                    </div>                                                                                                          
+                </div>
+                <div>
+                    <input class="btn btn-secondary" id="compositionMatrixApply" type="button" value="Создать матрицу" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>                                                        
+                </div>
+            </div>
+            <div class="compositionMatrixContainer">                                
                 <div class="compositionMatrixTable">
-                    <div class="compositionMatrixSize">
-                        <div>                  
-                            <h2>Ввести размерность матрицы отношения второй степени:</h2>
-                            <div class="compositionMatrixSize_div">
-                                ${compositionMatrixRowsInput}
-                                <span>X</span>
-                                ${compositionMatrixColumnsInput}
-                            </div>                                                                                                          
-                        </div>
-                        <div>
-                            <input class="btn btn-secondary" id="compositionMatrixApply" type="button" value="Создать матрицу" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>                                                        
-                        </div>
-                    </div>
+                    ${templateData.isCompositionMatrixSizeCreated ? `<h2>Матрица отношения второй степени:</h2>` : ""}    
                     <div class="compositionMatrixTable_values">
                         <div>
                             ${templateData.isCompositionMatrixSizeCreated ? compositionMatrixTable : ""}                                                                                      
                         </div>                                                               
-                    </div>                                        
-                </div>        
-                <div class="compositionMatrixButtons">
-                    ${significanceMatrixApplyInput}                                             
-                    ${compositionMatrixCancelInput}
-                </div>
-            </div> 
-            ${significanceMatrixContainer}                                                                              
+                    </div>    
+                    <div class="compositionMatrixButtons">
+                        ${significanceMatrixApplyInput}                                             
+                        ${compositionMatrixCancelInput}
+                    </div>                                    
+                </div>                        
+                ${significanceMatrixContainer} 
+            </div>                                                                              
         </div>`;
 }
 
