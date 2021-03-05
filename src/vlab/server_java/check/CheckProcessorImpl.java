@@ -138,7 +138,20 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                     }
                     else
                     {
-                        comment.append("Неверное значение элемента TM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы транзитивности отношения: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                        String sysComment = "sys=";
+                        String userComment = "user=";
+
+                        if(serverAnswer[i][j] == 1)
+                            sysComment += "да";
+                        if(serverAnswer[i][j] == 0)
+                            sysComment += "нет";
+
+                        if(clientAnswer[i][j] == 1)
+                            userComment += "да";
+                        if(clientAnswer[i][j] == 0)
+                            userComment += "нет";
+
+                        comment.append("Неверное значение элемента MR2[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("]: ").append(sysComment).append("; ").append(userComment).append(". ");
                     }
                 }
             }
@@ -160,7 +173,20 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         }
                         else
                         {
-                            comment.append("Неверное значение элемента TM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы транзитивности отношения: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                            String sysComment = "sys=";
+                            String userComment = "user=";
+
+                            if(serverAnswer[i][j] == 1)
+                                sysComment += "да";
+                            if(serverAnswer[i][j] == 0)
+                                sysComment += "нет";
+
+                            if(clientAnswer[i][j] == 1)
+                                userComment += "да";
+                            if(clientAnswer[i][j] == 0)
+                                userComment += "нет";
+
+                            comment.append("Неверное значение элемента MR2[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("]: ").append(sysComment).append("; ").append(userComment).append(". ");
                         }
                     }
                 }
@@ -204,7 +230,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         }
                         else
                         {
-                            comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы отношения второй степени: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                            comment.append("Неверное значение элемента MR2[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("]: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
                         }
                     }
                     else
@@ -216,7 +242,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         }
                         else
                         {
-                            comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы отношения второй степени: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
+                            comment.append("Неверное значение элемента MR2[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("]: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
                         }
                     }
                 }
